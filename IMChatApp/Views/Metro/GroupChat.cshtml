@@ -1,0 +1,358 @@
+﻿@{
+    ViewBag.Title = "GroupChat";
+    Layout = "~/Views/Shared/_MetroLayout.cshtml";
+}
+
+<div class="box span4">
+    <div class="box-header">
+        <h2><i class="halflings-icon th"></i><span class="break"></span></h2>
+    </div>
+    <div class="box-content">
+        <ul class="nav tab-menu nav-tabs" id="myTab">
+
+            <li class=""><a href="#Users">Users</a></li>
+            <li class=""><a href="#Rooms">Rooms</a></li>
+            <li class="active"><a href="#Friends">Friends</a></li>
+        </ul>
+
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane active" id="Users">
+                <div class="box-content">
+                    <ul class="dashboard-list">
+                        <li>
+                            <a href="#">
+                                <img class="avatar" alt="Lucas" src="~/Content/img/avatar.jpg">
+                            </a>
+                            <strong>Name:</strong> <a href="#">Łukasz Holeczek</a><br>
+                            <strong>Since:</strong> Jul 25, 2012 11:09<br>
+                            <strong>Status:</strong> <span class="label label-success">Approved</span>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img class="avatar" alt="Bill" src="~/Content/img/avatar9.jpg">
+                            </a>
+                            <strong>Name:</strong> <a href="#">Bill Cole</a><br>
+                            <strong>Since:</strong> Jul 25, 2012 11:09<br>
+                            <strong>Status:</strong> <span class="label label-warning">Pending</span>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img class="avatar" alt="Jane" src="~/Content/img/avatar5.jpg">
+                            </a>
+                            <strong>Name:</strong> <a href="#">Jane Sanchez</a><br>
+                            <strong>Since:</strong> Jul 25, 2012 11:09<br>
+                            <strong>Status:</strong> <span class="label label-important">Banned</span>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img class="avatar" alt="Kate" src="~/Content/img/avatar6.jpg">
+                            </a>
+                            <strong>Name:</strong> <a href="#">Kate Presley</a><br>
+                            <strong>Since:</strong> Jul 25, 2012 11:09<br>
+                            <strong>Status:</strong> <span class="label label-info">Updates</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+            <div class="tab-pane" id="Rooms">
+                <p>
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                </p>
+            </div>
+            <div class="tab-pane" id="Friends">
+                @*<p>
+                        Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.
+                    </p>
+                    <p>
+                        Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer
+                    </p>*@
+                <div class="box-content">
+                    <ul class="dashboard-list">
+                        <li>
+                            <a href="#">
+                                <img class="avatar" alt="Lucas" src="~/Content/img/avatar.jpg">
+                            </a>
+                            <strong>Name:</strong> <a href="#">Łukasz Holeczek</a><br>
+                            <strong>Since:</strong> Jul 25, 2012 11:09<br>
+                            <strong>Status:</strong> <span class="label label-success">Approved</span>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img class="avatar" alt="Bill" src="~/Content/img/avatar9.jpg">
+                            </a>
+                            <strong>Name:</strong> <a href="#">Bill Cole</a><br>
+                            <strong>Since:</strong> Jul 25, 2012 11:09<br>
+                            <strong>Status:</strong> <span class="label label-warning">Pending</span>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img class="avatar" alt="Jane" src="~/Content/img/avatar5.jpg">
+                            </a>
+                            <strong>Name:</strong> <a href="#">Jane Sanchez</a><br>
+                            <strong>Since:</strong> Jul 25, 2012 11:09<br>
+                            <strong>Status:</strong> <span class="label label-important">Banned</span>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img class="avatar" alt="Kate" src="~/Content/img/avatar6.jpg">
+                            </a>
+                            <strong>Name:</strong> <a href="#">Kate Presley</a><br>
+                            <strong>Since:</strong> Jul 25, 2012 11:09<br>
+                            <strong>Status:</strong> <span class="label label-info">Updates</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="box span8">
+    <div class="box-header">
+        <h2><i class="halflings-icon th"></i><span class="break"></span></h2>
+    </div>
+    <div class="box-content">
+        <ul class="nav tab-menu nav-tabs" id="ChatRoomsTab">
+            <li class=""><a href="#Lobby">Lobby</a></li>        
+        </ul>
+
+        <div id="ChatRoomsTabContent" class="tab-content">
+            <div class="tab-pane active" id="Users">
+
+
+            </div>
+            <div class="tab-pane" id="Rooms">
+                <p>
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                </p>
+            </div>
+            <div class="tab-pane" id="Friends">
+                @*<p>
+                    Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.
+                </p>
+                <p>
+                    Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer
+                </p>*@
+                <div class="box-content">
+                    <ul class="dashboard-list">
+                        <li>
+                            <a href="#">
+                                <img class="avatar" alt="Lucas" src="~/Content/img/avatar.jpg">
+                            </a>
+                            <strong>Name:</strong> <a href="#">Łukasz Holeczek</a><br>
+                            <strong>Since:</strong> Jul 25, 2012 11:09<br>
+                            <strong>Status:</strong> <span class="label label-success">Approved</span>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img class="avatar" alt="Bill" src="~/Content/img/avatar9.jpg">
+                            </a>
+                            <strong>Name:</strong> <a href="#">Bill Cole</a><br>
+                            <strong>Since:</strong> Jul 25, 2012 11:09<br>
+                            <strong>Status:</strong> <span class="label label-warning">Pending</span>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img class="avatar" alt="Jane" src="~/Content/img/avatar5.jpg">
+                            </a>
+                            <strong>Name:</strong> <a href="#">Jane Sanchez</a><br>
+                            <strong>Since:</strong> Jul 25, 2012 11:09<br>
+                            <strong>Status:</strong> <span class="label label-important">Banned</span>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img class="avatar" alt="Kate" src="~/Content/img/avatar6.jpg">
+                            </a>
+                            <strong>Name:</strong> <a href="#">Kate Presley</a><br>
+                            <strong>Since:</strong> Jul 25, 2012 11:09<br>
+                            <strong>Status:</strong> <span class="label label-info">Updates</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<div class="box span8" ontablet="span6" ondesktop="span8">
+    <div class="box-header">
+        <h2><i class="halflings-icon comment"></i><span class="break"></span>Chats</h2>
+        <div class="box-icon">
+            <a href="#" class="btn-minimize"><i class="halflings-icon chevron-up"></i></a>
+            <a href="#" class="btn-close"><i class="halflings-icon remove"></i></a>
+        </div>
+    </div>
+    <div class="box-content">
+        <ul class="chat">
+            <li class="left">
+                <img class="avatar" alt="Lucas" src="~/Content/img/avatar.jpg">
+                <span class="message">
+                    <span class="arrow"></span>
+                    <span class="from">Łukasz Holeczek</span>
+                    <span class="time">Jul 25, 2012 11:09</span>
+                    <span class="text">
+                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                    </span>
+                </span>
+            </li>
+            <li class="right">
+                <img class="avatar" alt="Lucas" src="~/Content/img/avatar.jpg">
+                <span class="message">
+                    <span class="arrow"></span>
+                    <span class="from">Łukasz Holeczek</span>
+                    <span class="time">Jul 25, 2012 11:08</span>
+                    <span class="text">
+                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                    </span>
+                </span>
+            </li>
+            <li class="left">
+                <img class="avatar" alt="Lucas" src="~/Content/img/avatar.jpg">
+                <span class="message">
+                    <span class="arrow"></span>
+                    <span class="from">Łukasz Holeczek</span>
+                    <span class="time">Jul 25, 2012 11:07</span>
+                    <span class="text">
+                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                    </span>
+                </span>
+            </li>
+            <li class="right">
+                <img class="avatar" alt="Lucas" src="~/Content/img/avatar.jpg">
+                <span class="message">
+                    <span class="arrow"></span>
+                    <span class="from">Łukasz Holeczek</span>
+                    <span class="time">Jul 25, 2012 11:06</span>
+                    <span class="text">
+                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                    </span>
+                </span>
+            </li>
+        </ul>
+        <div class="chat-form">
+            <textarea></textarea>
+            @*<input type="text" class="chat-text" />*@
+            <button class="btn btn-info">Send message</button>
+        </div>
+    </div>
+</div>
+
+
+@*<div class="box black span4 margin5" ontablet="span6" ondesktop="span4 ">
+    <div class="box-header">
+        <h2><i class="halflings-icon white user"></i><span class="break"></span>Last Users Metro Style</h2>
+        <div class="box-icon">
+            <a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
+            <a href="#" class="btn-close"><i class="halflings-icon white remove"></i></a>
+        </div>
+    </div>
+    <div class="box-content">
+        <ul class="dashboard-list metro">
+            <li class="green">
+                <a href="#">
+                    <img class="avatar" alt="Lucas" src="~/Content/img/avatar.jpg">
+                </a>
+                <strong>Name:</strong> Łukasz Holeczek<br>
+                <strong>Since:</strong> Jul 25, 2012 11:09<br>
+                <strong>Status:</strong> Approved
+            </li>
+            <li class="yellow">
+                <a href="#">
+                    <img class="avatar" alt="Bill" src="~/Content/img/avatar9.jpg">
+                </a>
+                <strong>Name:</strong> Bill Cole<br>
+                <strong>Since:</strong> Jul 25, 2012 11:09<br>
+                <strong>Status:</strong> Pending
+            </li>
+            <li class="red">
+                <a href="#">
+                    <img class="avatar" alt="Jane" src="~/Content/img/avatar5.jpg">
+                </a>
+                <strong>Name:</strong> Jane Sanchez<br>
+                <strong>Since:</strong> Jul 25, 2012 11:09<br>
+                <strong>Status:</strong> Banned
+            </li>
+            <li class="blue">
+                <a href="#">
+                    <img class="avatar" alt="Kate" src="~/Content/img/avatar6.jpg">
+                </a>
+                <strong>Name:</strong> Kate Presley<br>
+                <strong>Since:</strong> Jul 25, 2012 11:09<br>
+                <strong>Status:</strong> Updated
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+<div class="box black span6" ontablet="span6" ondesktop="span8">
+    <div class="box-header">
+        <h2><i class="halflings-icon white comment"></i><span class="break"></span>Chat Metro</h2>
+        <div class="box-icon">
+            <a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
+            <a href="#" class="btn-close"><i class="halflings-icon white remove"></i></a>
+        </div>
+    </div>
+    <div class="box-content">
+        <ul class="chat metro yellow">
+            <li class="left">
+                <img class="avatar" alt="Lucas" src="~/Content/img/avatar.jpg">
+                <span class="message">
+                    <span class="arrow"></span>
+                    <span class="from">Łukasz Holeczek</span>
+                    <span class="time">Jul 25, 2012 11:09</span>
+                    <span class="text">
+                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                    </span>
+                </span>
+            </li>
+
+            <li class="right">
+                <img class="avatar" alt="Lucas" src="~/Content/img/avatar.jpg">
+                <span class="message">
+                    <span class="arrow"></span>
+                    <span class="from">Łukasz Holeczek</span>
+                    <span class="time">Jul 25, 2012 11:08</span>
+                    <span class="text">
+                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                    </span>
+                </span>
+            </li>
+            <li class="left">
+                <img class="avatar" alt="Lucas" src="~/Content/img/avatar.jpg">
+                <span class="message">
+                    <span class="arrow"></span>
+                    <span class="from">Łukasz Holeczek</span>
+                    <span class="time">Jul 25, 2012 11:07</span>
+                    <span class="text">
+                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                    </span>
+                </span>
+            </li>
+            <li class="right">
+                <img class="avatar" alt="Lucas" src="~/Content/img/avatar.jpg">
+                <span class="message">
+                    <span class="arrow"></span>
+                    <span class="from">Łukasz Holeczek</span>
+                    <span class="time">Jul 25, 2012 11:06</span>
+                    <span class="text">
+                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                    </span>
+                </span>
+            </li>
+        </ul>
+        <div class="chat-form black">
+            <textarea></textarea>
+            <button class="btn btn-warning">Send message</button>
+        </div>
+    </div>
+</div>*@
