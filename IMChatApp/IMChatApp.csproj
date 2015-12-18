@@ -173,9 +173,7 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -211,6 +209,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\SCRIPT.txt" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\assets\css\bootstrap.min.css" />
     <Content Include="Content\assets\css\chosen-sprite%402x.png" />
@@ -579,7 +578,7 @@
     <Content Include="Content\src\css\themes.css" />
     <Content Include="Content\src\scripts\index.js" />
     <Content Include="Content\src\scripts\scrollglue.js" />
-    <Content Include="Doc\chatScreen.PNG" />
+    <Content Include="Views\Metro\Doc\chatScreen.PNG" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />

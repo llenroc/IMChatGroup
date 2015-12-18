@@ -23,11 +23,16 @@
             </div>*@
                 <div class="contacts" id="divContacts">
                     <ul class="list" id="listrooms" ng-show="ShowRoom">
-                        <li data-ng-repeat="room in rooms">
+                        <li>
+
+
+                        </li>
+
+                        <li data-ng-repeat="room in rooms" ng-click="roomClicked(room.id)">
                             <img class="avatar" src="~/Content/assets/img/avatar.jpg" alt="avatar">
-                            <span class="name">{{room.name}}  ({{room.users.length}})</span>
+                            <span class="name">{{room.name}}  ({{room.users}})</span>
                             <span class="status" data-ng-class="room.active ? 'online' :'offline' "></span>
-                            <span class="important">{{room.unreadmessage}}</span>
+                            <span ng-if="room.unreadmessage > 0" class="important">{{room.unreadmessage}}</span>
                         </li>
                         @*<li>
                             <img class="avatar" src="~/Content/assets/img/avatar2.jpg" alt="avatar">
@@ -54,10 +59,17 @@
                 <div class="conversation">
                     <div class="actions">
                         <div style="float:left ; width:50%; display:inline-block; overflow-x:hidden " id="divRoomsInList"> 
-                        <ul>
-                            <li><div class="inline avt-txt-cir" style="">S </div> <span class="important">4</span> </li>
-                            <li><div class="inline avt-txt-cir" style="">S </div>  </li>
-                            <li><div class="inline avt-txt-cir" style="">S </div>  </li>
+                        <ul>                       
+
+                            <li data-ng-repeat="r in roomsLoggedIn ">
+                                <div class="inline avt-txt-rect" style="" ng-click="roomClicked(room.id)">{{r.id}} </div>
+                                <span class="important">{{r.unreadmessage}}</span>
+                                <span class="close" ng-click="roomClosed(r)">X</span>
+                            </li>
+                            @*<li><div class="inline avt-txt-rect" style="">S </div> 
+                                <span class="close">X</span>  </li>
+                            <li><div class="inline avt-txt-rect" style="">S </div> 
+                                <span class="close">X</span>  </li>*@
                             </ul>                           
                             @*<img class="avatar" src="~/Content/assets/img/avatar3.jpg" alt="avatar">*@
                             
@@ -134,14 +146,17 @@
 <style>
     
 .avt-txt-rect {
-    background-color:rebeccapurple;
-     color:wheat;
-      font-size:x-large; 
-     font-weight:bold;
-     width:42px; height:42px; 
-     text-align:center;
-      padding-top:5px; 
-      float:left;     margin: 10px 0 10px 10px;
+    background-color: rebeccapurple;
+    color: wheat;
+    font-size: x-large;
+    font-weight: bold;
+    width: 55px;
+    height: 35px;
+    text-align: left;
+    padding-left: 20px;
+    padding-top: 1px;
+    float: left;
+    margin: 3px 0 10px 10px;
 }
 .avt-txt-cir {
     background-color:rebeccapurple;
@@ -203,6 +218,19 @@
     -moz-border-radius: 50em;
     border-radius: 50em;
     background: #ff5454;
+}   
+
+#divRoomsInList ul li .close {
+    font-size: 9px;
+    display: inline-block;
+    position: absolute;
+    top: 8px;
+    left: 47px;
+    line-height: 9px;
+    padding: 2px 6px;
+    color: black;
+    background: #fff;
+    opacity: 0.5!important;
 }
 /* Change the link color to #111 (black) on hover */
 li a:hover {

@@ -20,11 +20,11 @@ namespace IMChatApp.Hubs
         public void InitializeChat()
         {
             Rooms.Add(new RoomData { Id = 1, Name = "Rooms 1", Tittle = "Room 1" });
-            Rooms.Add(new RoomData { Id = 2, Name = "Rooms 1", Tittle = "Room 1" });
-            Rooms.Add(new RoomData { Id = 3, Name = "Rooms 1", Tittle = "Room 1" });
-            Rooms.Add(new RoomData { Id = 4, Name = "Rooms 1", Tittle = "Room 1" });
-            Rooms.Add(new RoomData { Id = 5, Name = "Rooms 1", Tittle = "Room 1" });
-            Rooms.Add(new RoomData { Id = 6, Name = "Rooms 1", Tittle = "Room 1" });
+            Rooms.Add(new RoomData { Id = 2, Name = "Rooms 2", Tittle = "Room 2" });
+            Rooms.Add(new RoomData { Id = 3, Name = "Rooms 3", Tittle = "Room 3" });
+            Rooms.Add(new RoomData { Id = 4, Name = "Rooms 4", Tittle = "Room 4" });
+            Rooms.Add(new RoomData { Id = 5, Name = "Rooms 5", Tittle = "Room 5" });
+            Rooms.Add(new RoomData { Id = 6, Name = "Rooms 6", Tittle = "Room 6" });
             getDummyUsers();
         }
 

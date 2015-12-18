@@ -7,7 +7,8 @@
 //divPrivateList
 //divRoomsInList
 //divContacts
-     appApp.controller("grpChatController", function ($scope , $rootScope, signalR, $compile) {
+
+appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $compile, $filter) {
 
          console.log("load");
          $scope.ShowRoom = true;
@@ -20,7 +21,7 @@
         $scope.connectionId = '';
         $scope.messages = [];
         $scope.activeRoom = '';
-        $scope.roomsLoggedIn = {};
+        $scope.roomsLoggedIn = [];
         // end variable declearation
         // ServerSide methods//
         signalR.startHub();
@@ -29,7 +30,10 @@
         
         signalR.GetOnlineUsers(function (users)
         {
-            console.log(users);
+            //console.log(users);
+            $scope.users = formatUser(JSON.parse(users));
+            //console.log($scope.users);
+            $scope.$apply();
         });
         //signalR.UserEntered(function (room, user, cid) {
         //    if ($scope.activeRoom == room && user != '') {
@@ -41,7 +45,9 @@
         //    }
         //});
         signalR.GetRooms(function (rooms, me) {
-            console.log(rooms);
+            //console.log(rooms);
+            $scope.rooms = formatRoom(JSON.parse(rooms));
+          //  console.log($scope.rooms);
             console.log(me);
         });
         signalR.UserLoggedOut(function (room, user) {
@@ -63,7 +69,22 @@
             //load users for the room
 
         }
-
+        $scope.roomClicked = function (id) {
+            console.log(id + "clicked");
+            
+            var found = $filter('filter')($scope.roomsLoggedIn, { id: id }, true);
+            if (!found.length) {
+                $scope.roomsLoggedIn.push($filter('filter')($scope.rooms, { id: id }, true)[0]); // = JSON.stringify(found[0]);
+            } else {
+               // $scope.selected = 'Not found';
+            }
+            // $scope.$apply();
+            console.log($scope.roomsLoggedIn);
+        }
+        $scope.roomClosed = function (r) {
+            console.log(r);
+            $scope.roomsLoggedIn.splice($scope.roomsLoggedIn.indexOf(r), 1);
+        }
         function loadAvailableRooms()
         {
            // $.each()
@@ -81,3 +102,55 @@
 
     })
 //});
+
+
+     function formatUser(users) {
+         if (!users || users.length === 0) {
+             return null;
+         }
+         return users.map(function (user) {
+             return {
+                 name: user.Name,
+                 avatar: user.Avatar,
+                 id: user.Id,
+                 connectionId:user.ConnectionId,
+                 age: user.Age,
+                 nick: user.Nick,
+                 status: 'online',
+                 sub: user.Name.substring(0, 1),
+                 unreadmessage: 0
+             };
+
+         });
+     }
+     function formatRoom(rooms) {
+         if (!rooms || rooms.length === 0) {
+             return null;
+         }
+         //debugger;
+         return rooms.map(function (room) {
+             return {
+                 name: room.Name,
+                 avatar: room.ImageFile, // getAvator('room',room.name,room.avator),
+                 id: room.Id,
+                 title: room.Tittle,
+                 status: 'offline',
+                 sub: room.Name.substring(0, 1),
+                 users: room.UsersCount,
+                 welcomeMessage:room.WelcomeMessage,
+                 unreadmessage: 0
+             };
+         });
+     }
+     
+     function getAvator(avatorFor, name, avator)
+     {
+         if (avator != '')
+             return avator;
+         var char = room.name.substring(0, 1);
+         if (avatorFor == 'room')
+             return '';
+         else 
+             return '';
+     }
+     
