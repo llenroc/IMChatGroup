@@ -33,6 +33,8 @@ namespace IMChatApp.Hubs
             if (Rooms.Count == 0)
                 InitializeChat();
             var a = HttpContext.Current.User.Identity.Name;
+            if (a == string.Empty)
+                a = "TestUser";
             var user = new ChatUser
             {
                 Name = a,
@@ -45,12 +47,13 @@ namespace IMChatApp.Hubs
                 UserType = 1, //fontColor = "red", 
                 Status = Status.Active
             };
-           
+          
            // Clients.Caller.setInitial(Context.ConnectionId, a);
             var oSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
             string sJSON = oSerializer.Serialize(chatUsers);
 
-            Clients.Caller.getrooms(oSerializer.Serialize(Rooms), a);
+            Clients.Caller.getrooms(oSerializer.Serialize(Rooms), user);
+            if (!(chatUsers.Where(u=>u.ConnectionId==Context.ConnectionId).Count()>0))
             chatUsers.Add(user);
             Clients.Caller.getOnlineUsers(sJSON);
             Clients.Others.newOnlineUser(user);
@@ -58,14 +61,22 @@ namespace IMChatApp.Hubs
 
         public void JoinRoom(int id)
         {
-            var user = chatUsers.Where(u => u.ConnectionId == Context.ConnectionId || u.ContextName == HttpContext.Current.User.Identity.Name);
-            Rooms.Where(x => x.Id == id).FirstOrDefault()
-                .RoomUsers.AddRange(user);
-            Groups.Add(Context.ConnectionId, id.ToString());
-            Clients.Group(id.ToString()).addNewUser(user.SingleOrDefault());
-            Clients.Caller.getRoomUsers(Rooms.Where(x => x.Id == id).FirstOrDefault());
-        }
+            if (Rooms.Where(r => r.Id == id).FirstOrDefault().RoomUsers.Where(u => u.ConnectionId == Context.ConnectionId).Count() == 0)
+            {
+                var user = chatUsers.Where(u => u.ConnectionId == Context.ConnectionId || u.ContextName == HttpContext.Current.User.Identity.Name).FirstOrDefault();
 
+                Rooms.Where(x => x.Id == id).FirstOrDefault()
+                    .RoomUsers.Add(user);
+                Groups.Add(Context.ConnectionId, id.ToString());
+                Clients.Group(id.ToString()).addNewUser(user);
+                var oSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+                Clients.Caller.getRoomUsers(oSerializer.Serialize(Rooms.Where(x => x.Id == id).FirstOrDefault().RoomUsers), Rooms.Where(x => x.Id == id).FirstOrDefault());
+            }
+        }
+        public void JoinPrivateChat(int id) { 
+      //  Clients.Caller.
+        
+        }
         public void LeaveRoom(int id)
         {
             var user = chatUsers.Where(u => u.ConnectionId == Context.ConnectionId
@@ -79,16 +90,15 @@ namespace IMChatApp.Hubs
         public void getDummyUsers()
         {
             var connectionid = Context.ConnectionId;
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 15; i++)
             {
                 chatUsers.Add(new ChatUser
                 {
                     Id = i,
                     ContextName = "Context" + i,
                     Gender = Gender.Male,
-                    ConnectionId = connectionid.Substring(0, connectionid.Length - 1) + i,
-                    Status = Status.Active
-                    ,
+                    ConnectionId = connectionid.Substring(0, connectionid.Length - 2) + i,
+                    Status = Status.Active,
                     UserType = 1,
                     Avatar = "normal",
                     Age = 15 + i,
@@ -96,16 +106,16 @@ namespace IMChatApp.Hubs
                     Nick = "user-" + i
                 });
             }
-            Rooms.Where(x => x.Id == 1).SingleOrDefault().RoomUsers.AddRange(chatUsers.Where(u => u.Id < 5));
-            Rooms.Where(x => x.Id == 1).SingleOrDefault().UsersCount = 4;
-            Rooms.Where(x => x.Id == 2).SingleOrDefault().RoomUsers.AddRange(chatUsers.Where(u => u.Id > 2 && u.Id < 9));
-            Rooms.Where(x => x.Id == 2).SingleOrDefault().UsersCount = 6;
-            Rooms.Where(x => x.Id == 3).SingleOrDefault().RoomUsers.AddRange(chatUsers.Where(u => u.Id > 4 && u.Id < 9));
-            Rooms.Where(x => x.Id == 3).SingleOrDefault().UsersCount = 5;
+            Rooms.Where(x => x.Id == 1).SingleOrDefault().RoomUsers.AddRange(chatUsers.Where(u => u.Id < 7));
+            Rooms.Where(x => x.Id == 1).SingleOrDefault().UsersCount = 7;
+            Rooms.Where(x => x.Id == 2).SingleOrDefault().RoomUsers.AddRange(chatUsers.Where(u => u.Id > 3 && u.Id < 12));
+            Rooms.Where(x => x.Id == 2).SingleOrDefault().UsersCount = 7;
+            Rooms.Where(x => x.Id == 3).SingleOrDefault().RoomUsers.AddRange(chatUsers.Where(u => u.Id > 6 && u.Id < 15));
+            Rooms.Where(x => x.Id == 3).SingleOrDefault().UsersCount = 7;
             Rooms.Where(x => x.Id == 4).SingleOrDefault().RoomUsers.AddRange(chatUsers.Where(u => u.Id > 2 && u.Id < 7));
             Rooms.Where(x => x.Id == 4).SingleOrDefault().UsersCount = 5;
-            Rooms.Where(x => x.Id == 5).SingleOrDefault().RoomUsers.AddRange(chatUsers.Where(u => u.Id >=5 ));
-            Rooms.Where(x => x.Id == 5).SingleOrDefault().UsersCount = 6;
+            Rooms.Where(x => x.Id == 5).SingleOrDefault().RoomUsers.AddRange(chatUsers.Where(u => u.Id >=6 ));
+            Rooms.Where(x => x.Id == 5).SingleOrDefault().UsersCount = 7;
         }
     }
 }

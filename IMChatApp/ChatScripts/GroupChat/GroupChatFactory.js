@@ -25,6 +25,11 @@
                     $hub.server.joinRoom(id);
                 });
             },
+            JoinPrivateChat:function (id) {
+                connection.done(function () {
+                    $hub.server.joinPrivateChat(id);
+                });
+           },
             LeaveRoom: function (id) {
                 connection.done(function () {
                     $hub.server.leaveRoom(id);
@@ -38,7 +43,7 @@
             GetRooms: function (callback) {
                     $hub.client.getrooms = callback;
                 },
-            RetRoomUsers: function (callback) {
+            GetRoomUsers: function (callback) {
                 $hub.client.getRoomUsers = callback;
             },
             UserLoggedOut: function (callback) {
