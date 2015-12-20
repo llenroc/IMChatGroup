@@ -35,6 +35,11 @@
                     $hub.server.leaveRoom(id);
                 });
             },
+            SendMessage: function (message, id, ispvt) {
+                connection.done(function () {
+                    $hub.server.sendMessage(message,id,ispvt);
+                });
+            },
             ////////////////////// CLIENT METHODS////////////////////            
             RemoveNewUser: function (callback) {
                 $hub.client.removeNewUser = callback;
@@ -70,8 +75,15 @@
             },
             UpdateConnectionId: function (callback) {
                 $hub.client.updateConnectionId = callback;
+            },
+            //recivePrivateMessage(user,sender, message)
+            RecivePrivateMessage: function (callback) {
+                $hub.client.recivePrivateMessage = callback;
+            },
+            //reciveRoomMessage(id, sender, message);
+            ReciveRoomMessage: function (callback) {
+                $hub.client.reciveRoomMessage = callback;
             }
-
 
         }
         return signalR;

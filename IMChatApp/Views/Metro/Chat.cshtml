@@ -92,40 +92,24 @@
                         </div>
                     </div>
                     <ul class="talk">
-                        <li>
+                        @*<li>
                             <img class="avatar" src="~/Content/assets/img/avatar.jpg" alt="avatar">
                             <span class="name">Łukasz Holeczek</span>
                             <span class="time">1:32PM</span>
                             <div class="message">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</div>
+                        </li>*@
+                        <li ng-repeat="m in messagesToShow">
+                            <img class="avatar" src="~/Content/assets/img/{{m.avatar}}" alt="avatar">
+                            <span class="name">{{m.from}}</span>
+                            <span class="time">{{m.time}}</span>
+                            <div class="message">{{m.message}}</div>
                         </li>
-                        <li>
-                            <img class="avatar" src="~/Content/assets/img/avatar.jpg" alt="avatar">
-                            <span class="name">Łukasz Holeczek</span>
-                            <span class="time">1:32PM</span>
-                            <div class="message">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</div>
-                        </li>
-                        <li>
-                            <img class="avatar" src="~/Content/assets/img/avatar.jpg" alt="avatar">
-                            <span class="name">Łukasz Holeczek</span>
-                            <span class="time">1:32PM</span>
-                            <div class="message">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</div>
-                        </li>
-                        <li>
-                            <img class="avatar" src="~/Content/assets/img/avatar.jpg" alt="avatar">
-                            <span class="name">Łukasz Holeczek</span>
-                            <span class="time">1:32PM</span>
-                            <div class="message">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</div>
-                        </li>
-                        <li>
-                            <img class="avatar" src="~/Content/assets/img/avatar.jpg" alt="avatar">
-                            <span class="name">Łukasz Holeczek</span>
-                            <span class="time">1:32PM</span>
-                            <div class="message">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</div>
-                        </li>
+
+                      
                     </ul>
                     <div class="form">
-                        <input type="text" class="write-message" placeholder="Write Message">
-                         <input type="button" class="btn btn-danger"  value="SEND"/>
+                        <input type="text" ng-model="message" class="write-message" placeholder="Write Message" id="txtMessage">
+                         <input type="button" class="btn btn-danger"  value="SEND" id="btnSend"  ng-click="sendMessage()"/>
                     </div>
                 </div>
             </div>
@@ -328,4 +312,11 @@ li img.avatar {
     padding-right:5px;
     margin: 2px 11px 8px 8px !important;
 }
+    #txtMessage {
+        width:91%;
+    }
+     #btnSend {
+        width:8%;
+        background-color:#ff3175;
+    }
 </style>

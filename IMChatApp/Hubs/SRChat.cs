@@ -86,7 +86,17 @@ namespace IMChatApp.Hubs
             Groups.Remove(Context.ConnectionId, id.ToString());
             Clients.Group(id.ToString()).removeNewUser(user);
         }
-
+        public void SendMessage(string message,int id ,bool isPvt )
+        {
+            var sender = chatUsers.Where(u => u.ConnectionId == Context.ConnectionId).SingleOrDefault();
+            if (isPvt){
+                var user=chatUsers.Where(x=>x.Id==id).FirstOrDefault();
+                Clients.Client(user.ConnectionId).recivePrivateMessage(user,sender, message);
+            }
+            else {
+                Clients.OthersInGroup(id.ToString()).reciveRoomMessage(id, sender, message);
+            }        
+        }
         public void getDummyUsers()
         {
             var connectionid = Context.ConnectionId;
