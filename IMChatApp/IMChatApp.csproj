@@ -201,6 +201,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\DropdownHelper.cs" />
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Hubs\SRChat.cs" />
     <Compile Include="Models\ChatModels.cs" />
@@ -732,6 +733,7 @@
     <Content Include="Views\Metro\GroupChat.cshtml" />
     <Content Include="Views\Shared\_LayoutMaster.cshtml" />
     <Content Include="Views\Metro\Chat.cshtml" />
+    <Content Include="Views\Metro\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Dependancies\Base.Data\Base.Data.csproj">

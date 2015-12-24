@@ -15,9 +15,9 @@
                     $hub.server.login(username);
                 });
             },
-            JoinChat: function () {
+            JoinChat: function (name) {
                 connection.done(function () {
-                    $hub.server.joinChat();
+                    $hub.server.joinChat(name);
                 });
             },
             JoinRoom: function (id) {

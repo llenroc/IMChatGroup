@@ -19,6 +19,7 @@ namespace IMChatApp.Controllers
         [Authorize]
         public ActionResult Chat(LoginViewModel model)
         {
+            
          // HttpContext.Current.User.Identity.Name  
             if (ModelState.IsValid)
             {

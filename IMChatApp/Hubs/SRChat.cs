@@ -15,7 +15,7 @@ namespace IMChatApp.Hubs
         {
             Clients.All.hello();
         }
-        static List<ChatUser> chatUsers = new List<ChatUser>();
+      public  static List<ChatUser> chatUsers = new List<ChatUser>();
         static List<RoomData> Rooms = new List<RoomData>();
         public void InitializeChat()
         {
@@ -28,35 +28,39 @@ namespace IMChatApp.Hubs
             getDummyUsers();
         }
 
-        public void JoinChat()
+        public void JoinChat(string nick)
         {
             if (Rooms.Count == 0)
                 InitializeChat();
-            var a = HttpContext.Current.User.Identity.Name;
-            if (a == string.Empty)
-                a = "TestUser";
-            var user = new ChatUser
+           // var a = HttpContext.Current.User.Identity.Name;
+           // var user = chatUsers.Where(x => x.Nick == nick.Trim()).FirstOrDefault();
+            if (nick != string.Empty)
             {
-                Name = a,
-                ConnectionId = Context.ConnectionId,
-                ContextName = a,
-                Age = 20,
-                Avatar = "",
-                Id = 1,
-                Gender = Gender.Male,
-                UserType = 1, //fontColor = "red", 
-                Status = Status.Active
-            };
-          
-           // Clients.Caller.setInitial(Context.ConnectionId, a);
-            var oSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
-            string sJSON = oSerializer.Serialize(chatUsers);
+              // chatUsers.Where(x => x.Nick == nick.Trim()).FirstOrDefault()=
+                var user = new ChatUser
+                {
+                    Name = nick,
+                    ConnectionId = Context.ConnectionId,
+                    ContextName = nick,
+                    Nick=nick,
+                    Age = 20,
+                    Avatar = "",
+                    Id = 1,
+                    Gender = Gender.Male,
+                    UserType = 1, //fontColor = "red", 
+                    Status = Status.Active
+                };
 
-            Clients.Caller.getrooms(oSerializer.Serialize(Rooms), user);
-            if (!(chatUsers.Where(u=>u.ConnectionId==Context.ConnectionId).Count()>0))
-            chatUsers.Add(user);
-            Clients.Caller.getOnlineUsers(sJSON);
-            Clients.Others.newOnlineUser(user);
+                // Clients.Caller.setInitial(Context.ConnectionId, a);
+                var oSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+                string sJSON = oSerializer.Serialize(chatUsers);
+
+                Clients.Caller.getrooms(oSerializer.Serialize(Rooms), user);
+                if (!(chatUsers.Where(u => u.ConnectionId == Context.ConnectionId).Count() > 0))
+                    chatUsers.Add(user);
+                Clients.Caller.getOnlineUsers(sJSON);
+                Clients.Others.newOnlineUser(user);
+            }
         }
 
         public void JoinRoom(int id)
