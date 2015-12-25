@@ -25,9 +25,19 @@
                     $hub.server.joinRoom(id);
                 });
             },
+            JoinPrivateChat:function (id) {
+                connection.done(function () {
+                    $hub.server.joinPrivateChat(id);
+                });
+           },
             LeaveRoom: function (id) {
                 connection.done(function () {
                     $hub.server.leaveRoom(id);
+                });
+            },
+            SendMessage: function (message, id, ispvt) {
+                connection.done(function () {
+                    $hub.server.sendMessage(message,id,ispvt);
                 });
             },
             ////////////////////// CLIENT METHODS////////////////////            
@@ -38,7 +48,7 @@
             GetRooms: function (callback) {
                     $hub.client.getrooms = callback;
                 },
-            RetRoomUsers: function (callback) {
+            GetRoomUsers: function (callback) {
                 $hub.client.getRoomUsers = callback;
             },
             UserLoggedOut: function (callback) {
@@ -65,8 +75,15 @@
             },
             UpdateConnectionId: function (callback) {
                 $hub.client.updateConnectionId = callback;
+            },
+            //recivePrivateMessage(user,sender, message)
+            RecivePrivateMessage: function (callback) {
+                $hub.client.recivePrivateMessage = callback;
+            },
+            //reciveRoomMessage(id, sender, message);
+            ReciveRoomMessage: function (callback) {
+                $hub.client.reciveRoomMessage = callback;
             }
-
 
         }
         return signalR;

@@ -40,8 +40,14 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
         //console.log($scope.users);
         $scope.$apply();
     });
-    signalR.AddNewUser(function (user) {
-        //console.log("new user addeed"); console.log(user);
+    signalR.AddNewUser(function (user,roomId) {
+        //console.log("new user addeed");
+        console.log(user);        
+        $.each($scope.roomUsers, function () {
+            if (this.id == roomId) {
+                this.users.push(CreateUser(user))  ;//= "Your new description";
+            }
+        });
     });
     signalR.GetRoomUsers(function (users, room) {
         //console.log(users);          
@@ -59,6 +65,14 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
     //        }
     //    }
     //});
+    signalR.NewOnlineUser(function (user) {
+        //console.log(users);  
+        $scope.users.push(CreateUser(user))
+        //$scope.usersInCurrentRoom = formatUser(JSON.parse(users));
+        //$scope.roomUsers.push(formatRoomUsers(room, users));
+        //console.log($scope.roomUsers);
+        $scope.$apply();
+    });
     signalR.GetRooms(function (rooms, me) { //console.log(rooms);
         $scope.rooms = formatRoom(JSON.parse(rooms));
         //  console.log($scope.rooms);   // console.log(me);

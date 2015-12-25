@@ -29,7 +29,7 @@
                     <div class="selectList" ng-click="showUserList()">
                         Users ({{usersInCurrentRoom.length}})
                     </div><div style="clear:both ; padding-bottom:2px;"></div>
-                    <ul class="list" id="listrooms" ng-show="ShowRoom">
+                    <ul class="list" id="listrooms" ng-show="ShowRoom" >
                   
                         <li data-ng-repeat="room in rooms" ng-click="roomClicked(room.id)">
                             <img class="avatar" src="~/Content/assets/img/avatar.jpg" alt="avatar">
@@ -326,4 +326,8 @@ li img.avatar {
         width:8%;
         background-color:#ff3175;
     }
+     .chat .contacts ul.list {
+       height: 400px!important;
+    overflow-y: scroll!important;
+}
 </style>

@@ -108,12 +108,12 @@ D:\GitHub\IMGroups\IMChatApp\bin\Antlr3.Runtime.pdb
 D:\GitHub\IMGroups\IMChatApp\obj\Debug\IMChatApp.csprojResolveAssemblyReference.cache
 D:\GitHub\IMGroups\IMChatApp\obj\Debug\IMChatApp.dll
 D:\GitHub\IMGroups\IMChatApp\obj\Debug\IMChatApp.pdb
-D:\sharad\I-Code\IMGroups\IMChatApp\obj\Debug\IMChatApp.csprojResolveAssemblyReference.cache
 D:\sharad\I-Code\IMGroups\IMChatApp\bin\IMChatApp.dll.config
 D:\sharad\I-Code\IMGroups\IMChatApp\bin\IMChatApp.dll
 D:\sharad\I-Code\IMGroups\IMChatApp\bin\IMChatApp.pdb
 D:\sharad\I-Code\IMGroups\IMChatApp\bin\Antlr3.Runtime.dll
 D:\sharad\I-Code\IMGroups\IMChatApp\bin\Autofac.dll
+D:\sharad\I-Code\IMGroups\IMChatApp\bin\Autofac.Integration.Mvc.dll
 D:\sharad\I-Code\IMGroups\IMChatApp\bin\Autofac.Integration.WebApi.dll
 D:\sharad\I-Code\IMGroups\IMChatApp\bin\AutoMapper.dll
 D:\sharad\I-Code\IMGroups\IMChatApp\bin\AutoMapper.Net4.dll
@@ -150,6 +150,7 @@ D:\sharad\I-Code\IMGroups\IMChatApp\bin\Base.Data.pdb
 D:\sharad\I-Code\IMGroups\IMChatApp\bin\Base.Entities.pdb
 D:\sharad\I-Code\IMGroups\IMChatApp\bin\Base.Services.pdb
 D:\sharad\I-Code\IMGroups\IMChatApp\bin\Autofac.xml
+D:\sharad\I-Code\IMGroups\IMChatApp\bin\Autofac.Integration.Mvc.xml
 D:\sharad\I-Code\IMGroups\IMChatApp\bin\Autofac.Integration.WebApi.xml
 D:\sharad\I-Code\IMGroups\IMChatApp\bin\AutoMapper.xml
 D:\sharad\I-Code\IMGroups\IMChatApp\bin\EntityFramework.xml
@@ -176,7 +177,6 @@ D:\sharad\I-Code\IMGroups\IMChatApp\bin\System.Web.WebPages.Deployment.xml
 D:\sharad\I-Code\IMGroups\IMChatApp\bin\System.Web.WebPages.Razor.xml
 D:\sharad\I-Code\IMGroups\IMChatApp\bin\Antlr3.Runtime.pdb
 D:\sharad\I-Code\IMGroups\IMChatApp\bin\PagedList.xml
+D:\sharad\I-Code\IMGroups\IMChatApp\obj\Debug\IMChatApp.csprojResolveAssemblyReference.cache
 D:\sharad\I-Code\IMGroups\IMChatApp\obj\Debug\IMChatApp.dll
 D:\sharad\I-Code\IMGroups\IMChatApp\obj\Debug\IMChatApp.pdb
-D:\sharad\I-Code\IMGroups\IMChatApp\bin\Autofac.Integration.Mvc.dll
-D:\sharad\I-Code\IMGroups\IMChatApp\bin\Autofac.Integration.Mvc.xml

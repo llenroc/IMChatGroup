@@ -72,7 +72,7 @@ namespace IMChatApp.Hubs
                 Rooms.Where(x => x.Id == id).FirstOrDefault()
                     .RoomUsers.Add(user);
                 Groups.Add(Context.ConnectionId, id.ToString());
-                Clients.Group(id.ToString()).addNewUser(user);
+                Clients.Group(id.ToString()).addNewUser(user,id);
                 var oSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
                 Clients.Caller.getRoomUsers(oSerializer.Serialize(Rooms.Where(x => x.Id == id).FirstOrDefault().RoomUsers), Rooms.Where(x => x.Id == id).FirstOrDefault());
             }
