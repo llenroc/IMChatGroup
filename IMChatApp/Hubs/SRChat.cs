@@ -83,13 +83,15 @@ namespace IMChatApp.Hubs
         }
         public void LeaveRoom(int id)
         {
-            var user = chatUsers.Where(u => u.ConnectionId == Context.ConnectionId
-                || u.ContextName == HttpContext.Current.User.Identity.Name).FirstOrDefault();
-            Rooms.Where(x => x.Id == id).FirstOrDefault()
-                .RoomUsers.Remove(user);
+            var user = chatUsers.Where(u => u.ConnectionId == Context.ConnectionId);
+             //   || u.ContextName == HttpContext.Current.User.Identity.Name).FirstOrDefault();
+            var rooms = Rooms.Where(x => x.Id == id).FirstOrDefault();
+               // .RoomUsers.Remove(user);
             Groups.Remove(Context.ConnectionId, id.ToString());
             Clients.Group(id.ToString()).removeNewUser(user);
         }
+
+
         public void SendMessage(string message,int id ,bool isPvt )
         {
             var sender = chatUsers.Where(u => u.ConnectionId == Context.ConnectionId).SingleOrDefault();
@@ -101,6 +103,37 @@ namespace IMChatApp.Hubs
                 Clients.OthersInGroup(id.ToString()).reciveRoomMessage(id, sender, message);
             }        
         }
+        public override System.Threading.Tasks.Task OnDisconnected(bool stopCalled)
+        {
+            ChatUser item = chatUsers.Where(u => u.ConnectionId == Context.ConnectionId).FirstOrDefault();
+            if (item != null)
+            {
+                var rooms= Rooms.Where(r=>r.RoomUsers.Contains(item)) ;
+               // loggedInUsers.Remove(item); // list = 
+                var id = Context.ConnectionId;
+                Clients.Others.newOfflineUser(item);
+               // var groups=Groups.
+                foreach(var r in rooms)
+                {
+                    Clients.OthersInGroup(r.Id.ToString()).userLoggedOff(item.Id,r.Id);
+                    Groups.Remove(item.ConnectionId,r.Id.ToString());
+                }
+            }
+            return base.OnDisconnected(false);
+        }
+
+        //public override Task OnConnected()
+        //{
+        //    AddGroups();
+        //    return base.OnConnected();
+        //}
+
+        ////rejoin groups if client disconnects and then reconnects
+        //public override Task OnReconnected()
+        //{
+        //    AddGroups();
+        //    return base.OnReconnected();
+        //}
         public void getDummyUsers()
         {
             var connectionid = Context.ConnectionId;
@@ -132,4 +165,6 @@ namespace IMChatApp.Hubs
             Rooms.Where(x => x.Id == 5).SingleOrDefault().UsersCount = 7;
         }
     }
+
+
 }

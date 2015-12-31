@@ -579,6 +579,8 @@
     <Content Include="Content\src\css\themes.css" />
     <Content Include="Content\src\scripts\index.js" />
     <Content Include="Content\src\scripts\scrollglue.js" />
+    <Content Include="Scripts\jquery.linq.js" />
+    <Content Include="Scripts\linq.js" />
     <Content Include="Views\Metro\Doc\chatScreen.PNG" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />

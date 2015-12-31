@@ -83,7 +83,12 @@
             //reciveRoomMessage(id, sender, message);
             ReciveRoomMessage: function (callback) {
                 $hub.client.reciveRoomMessage = callback;
+            },
+            UserLoggedOff: function (callback) {
+                $hub.client.userLoggedOff = callback;
             }
+
+            
 
         }
         return signalR;

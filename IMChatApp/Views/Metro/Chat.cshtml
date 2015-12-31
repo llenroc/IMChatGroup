@@ -46,7 +46,7 @@
                         @*openePrivateChat closePrivateChat*@
                     </ul>
                     <ul class="list" id="listusers" ng-hide="ShowRoom">
-                        <li data-ng-repeat="user in usersInCurrentRoom" ng-click="openePrivateChat(user.id)">
+                        <li data-ng-repeat="user in filteredUser = (roomUsers | filter: {id: to.id })[0].users" ng-click="openePrivateChat(user.id)">
                             <img class="avatar" src="~/Content/assets/img/avatar.jpg" alt="avatar">
                             <span class="name">{{user.name}}   </span>
                             <span class="status" data-ng-class="user.active ? 'online' :'busy' "></span>
@@ -125,7 +125,7 @@
 
     </div>
 
-
+        <button class="btn btn-primary" id="add-regular"><i class="halflings-icon white bell"></i>Regular</button>
 
 </div>
     <!-- end: Content -->
@@ -139,6 +139,7 @@
 <script type="text/javascript">
     //var app = angular.module("GroupChatApp", []);
 </script>
+<script src="~/Scripts/js/jquery.noty.js"></script>
 @*<script src="~/ChatScripts/GroupChat/GroupChatCtrl.js"></script>*@
 <script src="~/ChatScripts/GroupChat/GroupChatFactory.js"></script>
 <script src="~/ChatScripts/GroupChat/GroupChatCtrl.js"></script>

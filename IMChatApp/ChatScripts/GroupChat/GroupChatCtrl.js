@@ -45,9 +45,20 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
         console.log(user);        
         $.each($scope.roomUsers, function () {
             if (this.id == roomId) {
-                this.users.push(CreateUser(user))  ;//= "Your new description";
+                console.log(this);
+                this.users.push(CreateUser(user));//= "Your new description";
+                //rooms
+                console.log($scope.roomUsers);
+                if ($scope.to.id == roomId && $scope.to.type == 'room') {
+                    $scope.usersInCurrentRoom.push(CreateUser(user));
+
+                }               
             }
         });
+        //if (!$scope.$$phase) {
+        //    $scope.$apply();
+        //}
+        $scope.$apply();
     });
     signalR.GetRoomUsers(function (users, room) {
         //console.log(users);          
@@ -92,7 +103,16 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
     signalR.RecivePrivateMessage(function (user, sender, message) {
         var to = { id: id, type: 'private' };
         var from = CreateUser(sender);
+        var toUser = CreateUser(user);
         $scope.privateMessages.push(formatMessage(to, from, message, false));
+        // if user nt in list * increase unread message count
+        //
+        var users = Enumerable.From($scope.usersInPrivateChat)
+                                .Where("$.user.id =toUser.id")[0].unreadmessage++;        
+                                //.OrderBy("$.user.screen_name");
+    //.Select("$.user.screen_name + ':' + $.text")
+    //.ToArray();
+        //if($scope.usersInPrivateChat
         if (!$scope.$$phase) {
             $scope.$apply();
         }
@@ -106,6 +126,22 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
             $scope.$apply();
         }
 
+    });
+    signalR.UserLoggedOff(function (userId, roomId) {
+         $.each($scope.users, function (i) {
+            if ($scope.users[i].id == userId) {
+                $scope.users.splice(i, 1);
+                return false;
+            }
+        });
+         $.each($scope.roomUsers, function (i) {
+             if ($scope.roomUsers[i].id == roomId) {
+                 $.each($scope.roomUsers[i].users, function (j) {
+                     $scope.roomUsers[i].users.splice(j, 1);
+                     return false;
+                 });
+            }
+        });
     });
     //clients methods
     function initializeNewRoom(room) {
@@ -134,7 +170,7 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
 
     }
     $scope.roomClosed = function (r) {
-        debugger;
+      //  debugger;
         $.each($scope.roomMessages, function (i) {
             if ($scope.roomMessages[i].to == r.id) {
                 $scope.roomMessages.splice(i, 1);
@@ -299,7 +335,7 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
             id: room.Id,
             status: true,
             sub: room.Name.substring(0, 1),
-            users: users,
+            users: formatUser($.parseJSON(users)),// $.map(users, function (el) { return CreateUser(el) }),
             unreadmessage: 0
         };
 
