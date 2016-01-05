@@ -78,24 +78,27 @@ namespace SMS.UI.Controllers
             IEnumerable<Gender> GenderType = Enum.GetValues(typeof(Gender))
                                                        .Cast<Gender>();
             ViewBag.error = "";
-            return View( new ChatUser());
+            return View(new ChatUser { SessionId= Guid.NewGuid() });
         }
         [HttpPost]
         public ActionResult Login(ChatUser user)
         {
-            if (SRChat.chatUsers.Where(x => x.Nick == user.Nick).Count() > 0)
+            user.Nick = ValidateAndGetUserNick(user.Nick);
+            user.UserType = Convert.ToInt32(UserType.Guest); //fontColor = "red", 
+            user.Avatar = "";
+            TempData["user"] = user;
+            SRChat.chatUsers.Add(user);
+            return RedirectToAction("chat", new { gid = user.SessionId });           
+        }
+        string ValidateAndGetUserNick(string userNick)
+        {          
+            if (SRChat.chatUsers.Where(x => x.Nick == userNick).Count() > 0)
             {
-                ViewBag.error = "User name alredy exists";
-                return View("login",user);
+                Random random = new Random();
+                userNick = userNick + random.Next(0, 99);
+                ValidateAndGetUserNick(userNick);
             }
-            else
-            {
-                //SRChat.chatUsers.Add(new ChatUser { Nick = user.Nick });
-                TempData["user"] = user;
-                return RedirectToAction("chat");
-            }
-
-           
+            return userNick;           
         }
     }
 }

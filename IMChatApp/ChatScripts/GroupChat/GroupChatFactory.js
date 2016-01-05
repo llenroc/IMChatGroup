@@ -2,11 +2,13 @@
     'use strict'
     //if (app != undefined) {
     appApp.factory("signalR", function ($rootScope) {
-        var $hub = $.connection.srchat;
+        var $hub = $.connection.srchat;       
         var connection = null;
         var signalR = {
-            startHub: function () {
+            startHub: function (token) {
+                debugger;
                 console.log("started");
+                $.connection.hub.qs = { "token": token };
                 connection = $.connection.hub.start();
             },
             //////////////////// SERVER METHODS/////////////////
@@ -95,3 +97,24 @@
     });
     //}
 })();
+
+$(function ($) {
+    if (window.history && window.history.pushState) {
+        $(window).on('popstate', function () {
+            var hashLocation = location.hash;
+            var hashSplit = hashLocation.split("#!/");
+            var hashName = hashSplit[1];
+            if (hashName !== '') {
+                var hash = window.location.hash;
+                if (hash === '') {
+                    $.connection.srchat.connection.stop();
+                }
+            }
+        });
+        // window.history.pushState('forward', null, './#forward');
+    }
+});
+
+window.onbeforeunload = function (e) {
+    $.connection.srchat.connection.stop();
+};

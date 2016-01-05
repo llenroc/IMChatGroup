@@ -1,15 +1,9 @@
 ﻿
 //(function () {  
 //    'use strict'
-//  appApp = angular.module("GroupApp");
-// grpChatController
-//divRoomsList
-//divPrivateList
-//divRoomsInList
-//divContacts
-
 appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $compile, $filter) {
     $scope.ShowRoom = true;
+    $scope.token = '';
     // declear variables
     $scope.rooms = [];// RoomFactory.Rooms;
     //$scope.$parent.UserName = $("div#userId").text();
@@ -26,18 +20,19 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
     $scope.privateMessages = [];
     $scope.roomMessages = [];
     $scope.to = {};
-    // end variable declearation
-    // ServerSide methods//
-    signalR.startHub();
-   
+    // end variable declearation   // ServerSide methods//  
+    signalR.startHub($scope.TokenId);   
     if ($scope.Nick == '')
         $scope.Nick = angular.element("#Nick").val();
+    if ($scope.TokenId == '')
+        $scope.TokenId = angular.element("#SessionId").val();
     console.log($scope.Nick);
-    signalR.JoinChat($scope.Nick);
+  //  signalR.JoinChat($scope.TokenId);
     signalR.GetOnlineUsers(function (users) {
         //console.log(users);
         $scope.users = formatUser(JSON.parse(users));
-        //console.log($scope.users);
+        console.log($scope.users);
+        console.log("getOnlineUsers called");
         $scope.$apply();
     });
     signalR.AddNewUser(function (user,roomId) {
@@ -47,12 +42,16 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
             if (this.id == roomId) {
                 console.log(this);
                 this.users.push(CreateUser(user));//= "Your new description";
-                //rooms
-                console.log($scope.roomUsers);
+              //  console.log($scope.roomUsers);
                 if ($scope.to.id == roomId && $scope.to.type == 'room') {
                     $scope.usersInCurrentRoom.push(CreateUser(user));
-
-                }               
+                }              
+            }
+        });
+        $.each($scope.rooms, function (i) {
+            if ($scope.rooms[i].id == roomId) {
+                $scope.rooms[i].users++;
+                return;
             }
         });
         //if (!$scope.$$phase) {
@@ -60,22 +59,13 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
         //}
         $scope.$apply();
     });
-    signalR.GetRoomUsers(function (users, room) {
-        //console.log(users);          
+    signalR.GetRoomUsers(function (users, room) {        
         $scope.usersInCurrentRoom = formatUser(JSON.parse(users));
+        console.log("GetRoomUsers");
+        debugger; //rs);
         $scope.roomUsers.push(formatRoomUsers(room, users));
-        //console.log($scope.roomUsers);
         $scope.$apply();
-    });
-    //signalR.UserEntered(function (room, user, cid) {
-    //    if ($scope.activeRoom == room && user != '') {
-    //        var result = $.grep($scope.users, function (e) { return e.name == user; })
-    //         if (result != undefined || result != null) {
-    //            $scope.users.push({ name: user, ConnectionId: cid });
-    //            $scope.$apply();
-    //        }
-    //    }
-    //});
+    });   
     signalR.NewOnlineUser(function (user) {
         //console.log(users);  
         $scope.users.push(CreateUser(user))
@@ -83,6 +73,15 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
         //$scope.roomUsers.push(formatRoomUsers(room, users));
         //console.log($scope.roomUsers);
         $scope.$apply();
+    });
+    signalR.NewOfflineUser(function (user) {
+        var user = CreateUser(user);
+        $.each($scope.users, function (i) {
+            if ($scope.users[i].id ==user.id) {
+                $scope.users.splice(i, 1);
+                return false;
+            }       
+        });
     });
     signalR.GetRooms(function (rooms, me) { //console.log(rooms);
         $scope.rooms = formatRoom(JSON.parse(rooms));
@@ -128,12 +127,20 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
 
     });
     signalR.UserLoggedOff(function (userId, roomId) {
+        console.log("userLoggedOd" + userId + " : " + roomId);
+        debugger;
          $.each($scope.users, function (i) {
-            if ($scope.users[i].id == userId) {
-                $scope.users.splice(i, 1);
-                return false;
+             if ($scope.users[i].id == userId) {
+                 $scope.users.splice(i, 1);
+                 return;
             }
-        });
+         });
+         $.each($scope.rooms, function (i) {
+             if ($scope.rooms[i].id == userId) {
+                 $scope.rooms[i].users--;
+                 return;
+             }
+         });         
          $.each($scope.roomUsers, function (i) {
              if ($scope.roomUsers[i].id == roomId) {
                  $.each($scope.roomUsers[i].users, function (j) {
@@ -143,14 +150,6 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
             }
         });
     });
-    //clients methods
-    function initializeNewRoom(room) {
-        var headerHtml = ' <li class=""><a href="# ' + room + '">Lobby</a></li>  ';
-        $("#ChatRoomsTab").append(headerHtml);
-        var Content = '<div class="tab-pane active" id="' + room + '"> </div>';
-        $("#ChatRoomsTabContent").append(Content);
-        //load users for the room
-    }
     $scope.roomClicked = function (id) {
         if (!($scope.to.id == id && $scope.to.type == 'room')) {
             $scope.to = { id: id, type: 'room' };
@@ -170,14 +169,15 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
 
     }
     $scope.roomClosed = function (r) {
-      //  debugger;
+        //  debugger;
+        signalR.LeaveRoom(r.id);
         $.each($scope.roomMessages, function (i) {
             if ($scope.roomMessages[i].to == r.id) {
                 $scope.roomMessages.splice(i, 1);
                 return false;
             }
         });
-        // console.log(r);
+         console.log(r);        
         $scope.roomsLoggedIn.splice($scope.roomsLoggedIn.indexOf(r), 1);
         if ($scope.roomsLoggedIn.length != 0) {
             var last = $scope.roomsLoggedIn[$scope.roomsLoggedIn.length - 1]
@@ -193,7 +193,6 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
             else { $scope.messagesToShow = []; }
         }
     }
-
     $scope.openePrivateChat = function (id) {
         debugger;
         if (!($scope.to.id == id && $scope.to.type == 'private')) {
@@ -231,7 +230,6 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
         }
 
     }
-
     $scope.showRoomList = function () {
         $(".selectList").toggleClass("on");
         $scope.ShowRoom = true;
@@ -276,7 +274,6 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
             time: d.toLocaleTimeString()
         }
     }
-
     function formatUser(users) {
         if (!users || users.length === 0) {
             return null;
@@ -304,7 +301,6 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
             };
         }
     }
-
     function formatRoom(rooms) {
         if (!rooms || rooms.length === 0) {
             return null;
@@ -324,7 +320,6 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
             };
         });
     }
-
     function formatRoomUsers(room, users) {
         //if (!rooms || rooms.length === 0) {
         //    return null;
@@ -340,7 +335,6 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
         };
 
     }
-
     function getAvator(avatarFor, name, avatar) {
         if (avatar != '')
             return avatar;
@@ -351,3 +345,20 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
             return '';
     }
 
+//signalR.UserEntered(function (room, user, cid) {
+//    if ($scope.activeRoom == room && user != '') {
+//        var result = $.grep($scope.users, function (e) { return e.name == user; })
+//         if (result != undefined || result != null) {
+//            $scope.users.push({ name: user, ConnectionId: cid });
+//            $scope.$apply();
+//        }
+//    }
+//});
+    //clients methods
+    function initializeNewRoom(room) {
+        var headerHtml = ' <li class=""><a href="# ' + room + '">Lobby</a></li>  ';
+        $("#ChatRoomsTab").append(headerHtml);
+        var Content = '<div class="tab-pane active" id="' + room + '"> </div>';
+        $("#ChatRoomsTabContent").append(Content);
+        //load users for the room
+    }

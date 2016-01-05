@@ -6,6 +6,7 @@ using Microsoft.AspNet.SignalR;
 using Base.Entities.UIModels;
 using Base.Entities.Models;
 using Microsoft.AspNet.SignalR.Hubs;
+using System.Threading.Tasks;
 namespace IMChatApp.Hubs
 {
     [HubName("srchat")]
@@ -28,7 +29,7 @@ namespace IMChatApp.Hubs
             getDummyUsers();
         }
 
-        public void JoinChat(string nick)
+        public void JoinChatOld(string nick)
         {
             if (Rooms.Count == 0)
                 InitializeChat();
@@ -47,7 +48,7 @@ namespace IMChatApp.Hubs
                     Avatar = "",
                     Id = 1,
                     Gender = Gender.Male,
-                    UserType = 1, //fontColor = "red", 
+                    UserType = Convert.ToInt32(UserType.Guest), //fontColor = "red", 
                     Status = Status.Active
                 };
 
@@ -62,6 +63,8 @@ namespace IMChatApp.Hubs
                 Clients.Others.newOnlineUser(user);
             }
         }
+
+
 
         public void JoinRoom(int id)
         {
@@ -83,17 +86,23 @@ namespace IMChatApp.Hubs
         }
         public void LeaveRoom(int id)
         {
-            var user = chatUsers.Where(u => u.ConnectionId == Context.ConnectionId);
+            ChatUser user = chatUsers.Where(u => u.ConnectionId == Context.ConnectionId).FirstOrDefault();
              //   || u.ContextName == HttpContext.Current.User.Identity.Name).FirstOrDefault();
-            var rooms = Rooms.Where(x => x.Id == id).FirstOrDefault();
+            if(user!=null)
+            Rooms.Where(x => x.Id == id).FirstOrDefault().RoomUsers.Remove(user);
                // .RoomUsers.Remove(user);
+            //chatUsers.Where(x=>x.)
             Groups.Remove(Context.ConnectionId, id.ToString());
-            Clients.Group(id.ToString()).removeNewUser(user);
+            Clients.Group(id.ToString()).userLoggedOff(user.Id,id);//(user,id);
         }
 
 
         public void SendMessage(string message,int id ,bool isPvt )
         {
+            if (message.Contains("<script>"))
+            {
+                throw new HubException("This message will flow to the client", new { user = Context.User.Identity.Name, message = message });
+            }
             var sender = chatUsers.Where(u => u.ConnectionId == Context.ConnectionId).SingleOrDefault();
             if (isPvt){
                 var user=chatUsers.Where(x=>x.Id==id).FirstOrDefault();
@@ -113,25 +122,73 @@ namespace IMChatApp.Hubs
                 var id = Context.ConnectionId;
                 Clients.Others.newOfflineUser(item);
                // var groups=Groups.
+               
                 foreach(var r in rooms)
                 {
                     Clients.OthersInGroup(r.Id.ToString()).userLoggedOff(item.Id,r.Id);
                     Groups.Remove(item.ConnectionId,r.Id.ToString());
+                    Rooms.Where(x => x.Id == r.Id).FirstOrDefault().RoomUsers.Remove(item);
                 }
+                chatUsers.Remove(item);
             }
-            return base.OnDisconnected(false);
+            return base.OnDisconnected(stopCalled);
         }
 
         //public override Task OnConnected()
         //{
-        //    AddGroups();
+        //    ChatUser item = chatUsers.Where(u => u.ConnectionId == Context.ConnectionId).FirstOrDefault();
+        //    if (item == null)
+        //    {
+        //        var sessionId = Context.Headers["Referer"].ToString().Split('=')[1].Trim();//   	="http://localhost:8887/Metro/chat?gid=0a63df3a-cbfa-4d98-992c-628e83f3b7f5
+        //        item = chatUsers.Where(u => u.SessionId.ToString() == sessionId).FirstOrDefault();           
+        //        if (item != null && item.ConnectionId!=null)
+        //        {
+        //            var oldOcnnectionId = item.ConnectionId;
+        //            chatUsers.Where(u => u.SessionId.ToString() == sessionId).FirstOrDefault().ConnectionId = Context.ConnectionId;
+        //            var rooms = Rooms.Where(r => r.RoomUsers.Contains(item));
+        //            foreach (var r in rooms)
+        //            {
+        //                Clients.OthersInGroup(r.Id.ToString()).userLoggedOff(item.Id, r.Id);
+        //                Groups.Remove(oldOcnnectionId, r.Id.ToString());
+        //                Groups.Add(Context.ConnectionId, r.Id.ToString());
+        //            }
+                    
+        //            if(true){
+                    
+        //            }
+        //        }
+        //    }
+        //   // AddGroups();
         //    return base.OnConnected();
         //}
 
         ////rejoin groups if client disconnects and then reconnects
         //public override Task OnReconnected()
         //{
-        //    AddGroups();
+        //   // AddGroups();
+        //    ChatUser item = chatUsers.Where(u => u.ConnectionId == Context.ConnectionId).FirstOrDefault();
+        //    if (item == null)
+        //    {
+        //        var sessionId = Context.Headers["Referer"].ToString().Split('=')[1].Trim();//   	="http://localhost:8887/Metro/chat?gid=0a63df3a-cbfa-4d98-992c-628e83f3b7f5
+        //        item = chatUsers.Where(u => u.SessionId.ToString() == sessionId).FirstOrDefault();
+        //        if (item != null && item.ConnectionId != null)
+        //        {
+        //            var oldOcnnectionId = item.ConnectionId;
+        //            chatUsers.Where(u => u.SessionId.ToString() == sessionId).FirstOrDefault().ConnectionId = Context.ConnectionId;
+        //            var rooms = Rooms.Where(r => r.RoomUsers.Contains(item));
+        //            foreach (var r in rooms)
+        //            {
+        //                Clients.OthersInGroup(r.Id.ToString()).userLoggedOff(item.Id, r.Id);
+        //                Groups.Remove(oldOcnnectionId, r.Id.ToString());
+        //                Groups.Add(Context.ConnectionId, r.Id.ToString());
+        //            }
+
+        //            if (true)
+        //            {
+
+        //            }
+        //        }
+        //    }
         //    return base.OnReconnected();
         //}
         public void getDummyUsers()
@@ -144,7 +201,7 @@ namespace IMChatApp.Hubs
                     Id = i,
                     ContextName = "Context" + i,
                     Gender = Gender.Male,
-                    ConnectionId = connectionid.Substring(0, connectionid.Length - 2) + i,
+                    ConnectionId = Guid.NewGuid().ToString(),//  connectionid.Substring(0, connectionid.Length - 2) + i,
                     Status = Status.Active,
                     UserType = 1,
                     Avatar = "normal",
@@ -163,6 +220,39 @@ namespace IMChatApp.Hubs
             Rooms.Where(x => x.Id == 4).SingleOrDefault().UsersCount = 5;
             Rooms.Where(x => x.Id == 5).SingleOrDefault().RoomUsers.AddRange(chatUsers.Where(u => u.Id >=6 ));
             Rooms.Where(x => x.Id == 5).SingleOrDefault().UsersCount = 7;
+        }
+
+        public override Task OnConnected()
+        {
+            JoinChat(null);
+            return base.OnConnected();
+        }
+
+        public void JoinChat(string sessionId)
+        {
+            if(sessionId==null)
+                     sessionId = Context.Headers["Referer"].ToString().Split('=')[1].Trim();// 
+            if (Rooms.Count == 0)
+                InitializeChat();
+            // var a = HttpContext.Current.User.Identity.Name;
+            var user = chatUsers.Where(x => x.SessionId.ToString() == sessionId.Trim()).FirstOrDefault();
+            if (user != null)
+            {
+                user.ConnectionId = Context.ConnectionId;
+                if (user.Id == 0)
+                    user.Id = chatUsers.Max(x => x.Id) + 1;
+                if (string.IsNullOrEmpty(user.Name))
+                    user.Name = user.Nick;
+                user.ContextName = user.Name;
+                var oSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+                string sJSON = oSerializer.Serialize(chatUsers);
+
+                Clients.Caller.getrooms(oSerializer.Serialize(Rooms), user);
+                if (!(chatUsers.Where(u => u.ConnectionId == Context.ConnectionId).Count() > 0))
+                    chatUsers.Add(user);
+                Clients.Caller.getOnlineUsers(sJSON);
+                Clients.Others.newOnlineUser(user);
+            }
         }
     }
 

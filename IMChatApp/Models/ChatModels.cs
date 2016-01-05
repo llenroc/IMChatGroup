@@ -80,6 +80,8 @@ namespace IMChatApp.Models
         Busy,
         Offline
     }
+
+
     public class Css
     {
         public string color { get; set; }

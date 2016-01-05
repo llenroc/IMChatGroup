@@ -31,59 +31,28 @@
                 <div class="login-box">
                     <h2>Login to your account</h2>
                     @*<form class="form-horizontal" action="http://bootstrapmaster.com/live/simpliq2/index.html" method="post">*@
-@using (Html.BeginForm("Login", "Metro", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("Login", "Metro", new { ReturnUrl = ViewBag.ReturnUrl , gid=Model.SessionId }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
     @Html.AntiForgeryToken()
     <h4>Use a local account to log in.</h4>
     <hr />
     @Html.ValidationSummary(true)
+    @Html.HiddenFor(m=>m.SessionId)
                         <fieldset>
-                            @*@Html.CheckBoxFor(m => m.UserType, new { @ng_model = "IsGuest", @ng_click = "ChangeBox()" })*@
-                          
-
-                            @*@Html.LabelFor(m => m.UserNick, new { @class = "col-md-2 control-label" })*@
-                            @*<div ng-hide="IsGuest">
-                                @Html.TextBoxFor(m => m.UserNick, new { @class = "input-large col-xs-12", @placeholder = "type username" })
-                                @Html.ValidationMessageFor(m => m.UserNick)
-                            </div>*@
 
                             <div id="divUser" ng-hide="IsGuest">
                                         @Html.TextBoxFor(m => m.Nick, new { @class = "input-large col-xs-12 drop", @ng_model = "UserName", @placeholder = "type username" })
-                                        @Html.ValidationMessageFor(m => m.Nick)
-                                   
-                               
-                                    @*@Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })*@
-                                   
-                                        @*@Html.PasswordFor(m => m.Password, new { @class = "input-large col-xs-12", @ng_model = "Password", @placeholder = "type pwd" })
-                                        @Html.ValidationMessageFor(m => m.Name)*@
+                                        @Html.ValidationMessageFor(m => m.Nick)                                  
                                     
                                @Html.DropDownListFor(m => m.Gender , new { @class = "input-large col-xs-12 drop", @placeholder = "type pwd" })
-                                 @*="MyType", EnumHelper.GetSelectList(typeof(MyType)), "Select My Type", new { @class = "form-control" })*@
-                            
-                                if(@ViewBag.error!="")
+                                                     
+                                @if (ViewBag.error != "") { 
                                 <div><label class="error label label-danger">@ViewBag.error </label></div>
-
-                                @*<div class="form-group">
-                                    <div class="col-md-offset-2 col-md-10">
-                                        <div class="checkbox">
-                                            @Html.CheckBoxFor(m => m.RememberMe)
-                                            @Html.LabelFor(m => m.RememberMe)
-                                        </div>
-                                    </div>
-                                </div>*@
-</div>
-
-                            @*<input class="input-large col-xs-12" name="username" id="username" type="text" placeholder="type username" />
-                            <input class="input-large col-xs-12" name="password" id="password" type="password" placeholder="type password">
-                            <div class="clearfix"></div>
-
-                            <label class="remember" for="remember"><input type="checkbox" id="remember" />Remember me</label>
-
-                            <div class="clearfix"></div>*@
+                                }
+                            </div>                           
                             @Html.HiddenFor(model => model.Avatar)
                             <button type="submit" class="btn btn-primary col-xs-12">Login</button>
-                        </fieldset>
-}
+                        </fieldset>}
                     <hr>
                     <h3>Forgot Password?</h3>
                     <p>
