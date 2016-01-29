@@ -64,6 +64,8 @@ namespace SMS.UI.Controllers
 
         public ActionResult Chat()
         {
+            if (TempData["user"] == null)
+              return  View("Login", new ChatUser { SessionId = Guid.NewGuid() });
             ChatUser user = new ChatUser();
             if (TempData["user"] != null)
                 user = (ChatUser)TempData["user"];

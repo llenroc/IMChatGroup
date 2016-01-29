@@ -1,16 +1,28 @@
 ﻿
 //(function () {  
 //    'use strict'
-appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $compile, $filter) {
+appApp.directive('myEnter', function () {
+    return function (scope, element, attrs) {
+        element.bind("keydown keypress", function (event) {
+            if (event.which === 13) {
+                scope.$apply(function () {
+                    scope.$eval(attrs.myEnter);
+                });
+                event.preventDefault();
+            }
+        });
+    };
+}).controller("grpChatController", function ($scope, $rootScope, signalR, $compile, $filter) {
     $scope.ShowRoom = true;
     $scope.token = '';
     // declear variables
+    /// hhh
     $scope.rooms = [];// RoomFactory.Rooms;
     //$scope.$parent.UserName = $("div#userId").text();
     $scope.Nick = '';
     $scope.users = [];
     $scope.me = {};// $("div#userId").text();
-    $scope.contextName = 'test';
+    $scope.contextName = 'uu';
     $scope.connectionId = '';
     $scope.message = '';
     $scope.activeRoom = '';
@@ -21,36 +33,34 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
     $scope.roomMessages = [];
     $scope.to = {};
     // end variable declearation   // ServerSide methods//  
-    signalR.startHub($scope.TokenId);   
+    signalR.startHub($scope.TokenId);
     if ($scope.Nick == '')
         $scope.Nick = angular.element("#Nick").val();
     if ($scope.TokenId == '')
         $scope.TokenId = angular.element("#SessionId").val();
     console.log($scope.Nick);
-  //  signalR.JoinChat($scope.TokenId);
+    //  signalR.JoinChat($scope.TokenId);
     signalR.GetOnlineUsers(function (users) {
         //console.log(users);
         $scope.users = formatUser(JSON.parse(users));
         console.log($scope.users);
-        console.log("getOnlineUsers called");
+        console.log("getOnlineUsers called at" + Date());
         $scope.$apply();
     });
-    signalR.AddNewUser(function (user,roomId) {
-        //console.log("new user addeed");
-        console.log(user);        
+    signalR.AddNewUser(function (user, roomId) {
+        console.log("new user addeed" + Date());
+        console.log(user);
+        debugger;
         $.each($scope.roomUsers, function () {
             if (this.id == roomId) {
                 console.log(this);
-                this.users.push(CreateUser(user));//= "Your new description";
-              //  console.log($scope.roomUsers);
-                if ($scope.to.id == roomId && $scope.to.type == 'room') {
-                    $scope.usersInCurrentRoom.push(CreateUser(user));
-                }              
+                this.users.push(CreateUser(user));//= "Your new description";                       
             }
         });
         $.each($scope.rooms, function (i) {
             if ($scope.rooms[i].id == roomId) {
-                $scope.rooms[i].users++;
+                console.log("user count increased in room " + i);
+                $scope.rooms[i].users = $scope.rooms[i].users + 1;
                 return;
             }
         });
@@ -59,13 +69,12 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
         //}
         $scope.$apply();
     });
-    signalR.GetRoomUsers(function (users, room) {        
+    signalR.GetRoomUsers(function (users, room) {
         $scope.usersInCurrentRoom = formatUser(JSON.parse(users));
         console.log("GetRoomUsers");
-        debugger; //rs);
         $scope.roomUsers.push(formatRoomUsers(room, users));
         $scope.$apply();
-    });   
+    });
     signalR.NewOnlineUser(function (user) {
         //console.log(users);  
         $scope.users.push(CreateUser(user))
@@ -77,15 +86,15 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
     signalR.NewOfflineUser(function (user) {
         var user = CreateUser(user);
         $.each($scope.users, function (i) {
-            if ($scope.users[i].id ==user.id) {
+            if ($scope.users[i].id == user.id) {
                 $scope.users.splice(i, 1);
                 return false;
-            }       
+            }
         });
     });
     signalR.GetRooms(function (rooms, me) { //console.log(rooms);
         $scope.rooms = formatRoom(JSON.parse(rooms));
-        //  console.log($scope.rooms);   // console.log(me);
+        // console.log($scope.rooms);   // console.log(me);
         $scope.me = CreateUser(me);
         //console.log($scope.me);
     });
@@ -107,10 +116,10 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
         // if user nt in list * increase unread message count
         //
         var users = Enumerable.From($scope.usersInPrivateChat)
-                                .Where("$.user.id =toUser.id")[0].unreadmessage++;        
-                                //.OrderBy("$.user.screen_name");
-    //.Select("$.user.screen_name + ':' + $.text")
-    //.ToArray();
+                                .Where("$.user.id =toUser.id")[0].unreadmessage++;
+        //.OrderBy("$.user.screen_name");
+        //.Select("$.user.screen_name + ':' + $.text")
+        //.ToArray();
         //if($scope.usersInPrivateChat
         if (!$scope.$$phase) {
             $scope.$apply();
@@ -126,30 +135,69 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
         }
 
     });
-    signalR.UserLoggedOff(function (userId, roomId) {
-        console.log("userLoggedOd" + userId + " : " + roomId);
-        debugger;
-         $.each($scope.users, function (i) {
-             if ($scope.users[i].id == userId) {
-                 $scope.users.splice(i, 1);
-                 return;
-            }
-         });
-         $.each($scope.rooms, function (i) {
-             if ($scope.rooms[i].id == userId) {
-                 $scope.rooms[i].users--;
-                 return;
-             }
-         });         
-         $.each($scope.roomUsers, function (i) {
-             if ($scope.roomUsers[i].id == roomId) {
-                 $.each($scope.roomUsers[i].users, function (j) {
-                     $scope.roomUsers[i].users.splice(j, 1);
-                     return false;
-                 });
+
+    signalR.UserLoggedOff(function (userId) {
+        $.each($scope.users, function (i) {
+            if ($scope.users[i].id == userId) {
+                $scope.users.splice(i, 1);
+                console.log("00");
+                return false;
             }
         });
     });
+
+    signalR.LoggedOutRoom(function (userId, roomId) {
+
+        console.log("userLoggedOd" + userId + " : " + roomId);
+        $.each($scope.rooms, function (i) {
+            if ($scope.rooms[i].id == roomId) {
+                debugger;
+                $scope.rooms[i].users = ($scope.rooms[i].users - 1);
+                console.log(roomId + "-11-");
+                return false;
+            }
+        });
+        $.each($scope.roomUsers, function (i) {
+            if ($scope.roomUsers[i].id == roomId) {
+                $scope.roomUsers.splice(i, 1);
+                console.log("left-211-");
+            }
+        });
+        if (!$scope.$$phase) {
+            $scope.$apply();
+        }
+    });
+    signalR.LeftRoom(function (userId, roomId) {
+        console.log("LeftRoom" + userId + " : " + roomId);
+        // decrese count of roomusers
+        $.each($scope.rooms, function (i) {
+            if ($scope.rooms[i].id == roomId) {
+                $scope.rooms[i].users = ($scope.rooms[i].users - 1);
+                console.log(roomId + "-11-");
+                console.log($scope.rooms[i].users);
+                return false;
+            }
+        });
+        // Delete users of room
+        $.each($scope.roomUsers, function (i) {
+            if ($scope.roomUsers[i].id == roomId) {
+                $.each($scope.roomUsers[i].users, function (j) {
+                    if ($scope.roomUsers[i].users[j].id == userId) {
+                        $scope.roomUsers[i].users.splice(j, 1);
+                        console.log("::::  Deleted user ")
+                        console.log($scope.roomUsers[i].users);
+                        return false;
+                    }
+                });
+            }
+        });
+
+        if (!$scope.$$phase) {
+            $scope.$apply();
+        }
+    });
+
+
     $scope.roomClicked = function (id) {
         if (!($scope.to.id == id && $scope.to.type == 'room')) {
             $scope.to = { id: id, type: 'room' };
@@ -158,6 +206,7 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
             var found = $filter('filter')($scope.roomsLoggedIn, { id: id }, true);
             if (!found.length) {
                 $scope.roomsLoggedIn.push($filter('filter')($scope.rooms, { id: id }, true)[0]); // = JSON.stringify(found[0]);
+
             } else {
                 // $scope.selected = 'Not found';
             }
@@ -166,6 +215,13 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
         else {
             // $scope.messagesToShow = $filter('filter')($scope.roomMessages, { to: id }, true);
         }
+        $.each($scope.roomsLoggedIn, function (i) {
+            if ($scope.roomsLoggedIn[i].id == id)
+                $scope.roomsLoggedIn[i].active = true;
+            else
+                $scope.roomsLoggedIn[i].active = false;
+        });
+        console.log($scope.roomsLoggedIn);
 
     }
     $scope.roomClosed = function (r) {
@@ -177,7 +233,7 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
                 return false;
             }
         });
-         console.log(r);        
+        console.log(r);
         $scope.roomsLoggedIn.splice($scope.roomsLoggedIn.indexOf(r), 1);
         if ($scope.roomsLoggedIn.length != 0) {
             var last = $scope.roomsLoggedIn[$scope.roomsLoggedIn.length - 1]
@@ -256,7 +312,7 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
         if (!$scope.$$phase) {
             $scope.$apply();
         }
-    }   
+    }
 });
     //});
     function formatMessage(to, from, message, status) {
@@ -301,6 +357,7 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
             };
         }
     }
+ 
     function formatRoom(rooms) {
         if (!rooms || rooms.length === 0) {
             return null;
@@ -316,7 +373,8 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
                 sub: room.Name.substring(0, 1),
                 users: room.UsersCount,
                 welcomeMessage: room.WelcomeMessage,
-                unreadmessage: 0
+                unreadmessage: 0,
+                active:false
             };
         });
     }
@@ -345,15 +403,11 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
             return '';
     }
 
-//signalR.UserEntered(function (room, user, cid) {
-//    if ($scope.activeRoom == room && user != '') {
-//        var result = $.grep($scope.users, function (e) { return e.name == user; })
-//         if (result != undefined || result != null) {
-//            $scope.users.push({ name: user, ConnectionId: cid });
-//            $scope.$apply();
-//        }
-//    }
-//});
+    function MakeRoomActive(room)
+    {      
+        room.active = true;       
+        return room;
+    }
     //clients methods
     function initializeNewRoom(room) {
         var headerHtml = ' <li class=""><a href="# ' + room + '">Lobby</a></li>  ';
@@ -362,3 +416,17 @@ appApp.controller("grpChatController", function ($scope, $rootScope, signalR, $c
         $("#ChatRoomsTabContent").append(Content);
         //load users for the room
     }
+
+
+    appApp.directive('myEnter', function () {
+        return function (scope, element, attrs) {
+            element.bind("keydown keypress", function (event) {
+                if (event.which === 13) {
+                    scope.$apply(function () {
+                        scope.$eval(attrs.myEnter);
+                    });
+                    event.preventDefault();
+                }
+            });
+        };
+    });

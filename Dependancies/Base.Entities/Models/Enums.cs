@@ -17,7 +17,14 @@ namespace Base.Entities.Models
         Deactive=2,
         Closed=3            
     }
+    public enum UserType
+    {
+        Admin = 1,
+        Host = 2,
+        User = 3,
+        Guest = 9
 
+    }
     public enum Gender
     {
         Male=1,

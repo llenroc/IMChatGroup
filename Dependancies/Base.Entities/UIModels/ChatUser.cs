@@ -17,6 +17,7 @@ namespace Base.Entities.UIModels
         public Gender Gender { get; set; }
         public int Age { get; set; }        
         public string   Avatar { get; set; }
-        public Status Status { get; set; }
+        public Status Status { get; set; }       
+        public Guid SessionId { get; set; }
     }
 }

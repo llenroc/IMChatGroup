@@ -88,9 +88,15 @@
             },
             UserLoggedOff: function (callback) {
                 $hub.client.userLoggedOff = callback;
+            },
+            LeftRoom: function (callback) {
+                console.log("Left");
+                $hub.client.leftRoom = callback;
+            },
+            LoggedOutRoom: function (callback) {
+                console.log("LoggedOutRoom");
+                $hub.client.loggedOutRoom = callback;
             }
-
-            
 
         }
         return signalR;

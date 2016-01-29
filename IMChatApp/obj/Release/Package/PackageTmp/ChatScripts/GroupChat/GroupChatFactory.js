@@ -2,11 +2,13 @@
     'use strict'
     //if (app != undefined) {
     appApp.factory("signalR", function ($rootScope) {
-        var $hub = $.connection.srchat;
+        var $hub = $.connection.srchat;       
         var connection = null;
         var signalR = {
-            startHub: function () {
+            startHub: function (token) {
+                debugger;
                 console.log("started");
+                $.connection.hub.qs = { "token": token };
                 connection = $.connection.hub.start();
             },
             //////////////////// SERVER METHODS/////////////////
@@ -15,9 +17,9 @@
                     $hub.server.login(username);
                 });
             },
-            JoinChat: function () {
+            JoinChat: function (name) {
                 connection.done(function () {
-                    $hub.server.joinChat();
+                    $hub.server.joinChat(name);
                 });
             },
             JoinRoom: function (id) {
@@ -83,6 +85,17 @@
             //reciveRoomMessage(id, sender, message);
             ReciveRoomMessage: function (callback) {
                 $hub.client.reciveRoomMessage = callback;
+            },
+            UserLoggedOff: function (callback) {
+                $hub.client.userLoggedOff = callback;
+            },
+            LeftRoom: function (callback) {
+                console.log("Left");
+                $hub.client.leftRoom = callback;
+            },
+            LoggedOutRoom: function (callback) {
+                console.log("LoggedOutRoom");
+                $hub.client.loggedOutRoom = callback;
             }
 
         }
@@ -90,3 +103,24 @@
     });
     //}
 })();
+
+$(function ($) {
+    if (window.history && window.history.pushState) {
+        $(window).on('popstate', function () {
+            var hashLocation = location.hash;
+            var hashSplit = hashLocation.split("#!/");
+            var hashName = hashSplit[1];
+            if (hashName !== '') {
+                var hash = window.location.hash;
+                if (hash === '') {
+                    $.connection.srchat.connection.stop();
+                }
+            }
+        });
+        // window.history.pushState('forward', null, './#forward');
+    }
+});
+
+window.onbeforeunload = function (e) {
+    $.connection.srchat.connection.stop();
+};

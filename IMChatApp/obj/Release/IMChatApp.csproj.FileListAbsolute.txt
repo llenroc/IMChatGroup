@@ -125,3 +125,9 @@ D:\sharad\I-Code\IMGroups\IMChatApp\bin\Autofac.xml
 D:\sharad\I-Code\IMGroups\IMChatApp\bin\Autofac.Integration.Mvc.xml
 D:\sharad\I-Code\IMGroups\IMChatApp\bin\Autofac.Integration.WebApi.xml
 D:\sharad\I-Code\IMGroups\IMChatApp\bin\AutoMapper.xml
+D:\sharad\I-Code\IMGroups\IMChatApp\bin\Hangfire.Core.dll
+D:\sharad\I-Code\IMGroups\IMChatApp\bin\Hangfire.SqlServer.dll
+D:\sharad\I-Code\IMGroups\IMChatApp\bin\Hangfire.SqlServer.Msmq.dll
+D:\sharad\I-Code\IMGroups\IMChatApp\bin\Hangfire.Core.xml
+D:\sharad\I-Code\IMGroups\IMChatApp\bin\Hangfire.SqlServer.xml
+D:\sharad\I-Code\IMGroups\IMChatApp\bin\Hangfire.SqlServer.Msmq.xml

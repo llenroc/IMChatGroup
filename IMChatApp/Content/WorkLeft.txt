@@ -1,0 +1,9 @@
+﻿1. No users in first room for First user
+2. Enter - message send
+3. avator - diff / option to chose
+4. close room - user should disapear from list
+5. usercount should be updated when new user joins room ++ (done)
+
+
+DONE
+-- USER is added and removed  on Join and Left 
